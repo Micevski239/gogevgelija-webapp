@@ -26,7 +26,7 @@ export function ListingCard({ listing }: ListingCardProps) {
     }
   };
 
-  const imageUrl = listing.image_medium || listing.image || '/placeholder.jpg';
+  const imageUrl = listing.thumbnail_image || listing.image_medium || listing.image || '/placeholder.jpg';
 
   return (
     <Link href={`/listings/${listing.id}`}>

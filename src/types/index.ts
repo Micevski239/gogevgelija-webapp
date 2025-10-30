@@ -57,6 +57,7 @@ export interface Listing {
   amenities?: ListingAmenity[] | string[] | null;
   image: string;
   images?: string[];
+  thumbnail_image?: string | null;
   image_thumbnail?: string | null;
   image_medium?: string | null;
   images_medium?: string[];
@@ -86,6 +87,7 @@ export interface Event {
   location: string;
   image?: string;
   images?: string[];
+  thumbnail_image?: string | null;
   image_thumbnail?: string | null;
   image_medium?: string | null;
   cover_image?: string;
@@ -135,6 +137,7 @@ export interface Promotion {
   tags?: string[] | { tags?: string[] } | string | null;
   image: string;
   images?: string[];
+  thumbnail_image?: string | null;
   image_thumbnail?: string | null;
   image_medium?: string | null;
   valid_until: string | null;
@@ -159,6 +162,7 @@ export interface Blog {
   tags?: string[] | { tags?: string[] } | string | null;
   image?: string;
   images?: string[];
+  thumbnail_image?: string | null;
   image_thumbnail?: string | null;
   image_medium?: string | null;
   cover_image?: string;

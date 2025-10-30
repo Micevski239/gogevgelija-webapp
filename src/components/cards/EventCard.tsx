@@ -26,7 +26,7 @@ export function EventCard({ event }: EventCardProps) {
     }
   };
 
-  const imageUrl = event.image_medium || event.image || event.cover_image || '/placeholder.jpg';
+  const imageUrl = event.thumbnail_image || event.image_medium || event.image || event.cover_image || '/placeholder.jpg';
 
   return (
     <Link href={`/events/${event.id}`}>
