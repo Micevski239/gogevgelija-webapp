@@ -36,7 +36,8 @@ export function EventCard({ event, variant = 'grid', showDetails = true }: Event
     : [event.thumbnail_image || event.image_medium || event.image || event.cover_image || '/placeholder.jpg'];
 
   // Mock rating for events
-  const rating = event.rating || 4.7;
+  const ratingValue = typeof event.rating === 'number' ? event.rating : Number(event.rating);
+  const rating = Number.isFinite(ratingValue) ? ratingValue : 4.7;
   const reviewCount = event.join_count || 89;
 
   // Parse date to get month and day
