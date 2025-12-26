@@ -27,7 +27,7 @@ const iconColors = {
 };
 
 export const ToastContainer: React.FC = () => {
-  const { toasts, removeToast } = useToast();
+  const { toasts, hideToast } = useToast();
 
   if (toasts.length === 0) {
     return null;
@@ -50,7 +50,7 @@ export const ToastContainer: React.FC = () => {
             <Icon className={cn('h-5 w-5 flex-shrink-0 mt-0.5', iconColors[toast.type])} />
             <p className="flex-1 text-sm font-medium">{toast.message}</p>
             <button
-              onClick={() => removeToast(toast.id)}
+              onClick={() => hideToast(toast.id)}
               className="flex-shrink-0 opacity-70 hover:opacity-100 transition-opacity"
               aria-label="Close notification"
             >
