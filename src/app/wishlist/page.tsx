@@ -6,17 +6,19 @@ import { ListingCard } from '@/components/cards/ListingCard';
 import { EventCard } from '@/components/cards/EventCard';
 import { PromotionCard } from '@/components/cards/PromotionCard';
 import { BlogCard } from '@/components/cards/BlogCard';
-import { Tabs } from '@/components/ui/Tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { Spinner } from '@/components/ui/Spinner';
 import { Heart, LogIn } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import type { Listing, Event, Promotion, Blog } from '@/types';
 
+type WishlistTab = 'all' | 'listings' | 'events' | 'promotions' | 'blogs';
+
 export default function WishlistPage() {
   const { user } = useAuth();
   const { wishlistItems, loading } = useWishlist();
-  const [activeTab, setActiveTab] = useState<'all' | 'listings' | 'events' | 'promotions' | 'blogs'>('all');
+  const [activeTab, setActiveTab] = useState<WishlistTab>('all');
 
   const listings = wishlistItems.filter(item => item.item_type === 'listing').map(item => item.item_data as Listing);
   const events = wishlistItems.filter(item => item.item_type === 'event').map(item => item.item_data as Event);
@@ -94,11 +96,23 @@ export default function WishlistPage() {
         ) : (
           <>
             <Tabs
-              tabs={tabs}
-              activeTab={activeTab}
-              onChange={(value) => setActiveTab(value as typeof activeTab)}
+              defaultValue="all"
+              value={activeTab}
+              onValueChange={(value) => setActiveTab(value as WishlistTab)}
               className="mb-8"
-            />
+            >
+              <TabsList className="flex flex-wrap gap-2 bg-transparent p-0">
+                {tabs.map((tab) => (
+                  <TabsTrigger
+                    key={tab.value}
+                    value={tab.value}
+                    className="rounded-full border px-4 py-2 text-sm font-semibold transition-colors data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-primary/50"
+                  >
+                    {tab.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
 
             {activeTab === 'all' && (
               <div className="space-y-12">
