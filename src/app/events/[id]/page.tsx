@@ -292,7 +292,7 @@ END:VCALENDAR`;
                     onClick={handleJoinToggle}
                     disabled={joinMutation.isPending || unjoinMutation.isPending}
                     className="w-full"
-                    variant={event.has_joined ? 'outline' : 'default'}
+                    variant={event.has_joined ? 'outline' : 'primary'}
                   >
                     {event.has_joined ? 'Leave Event' : 'Join Event'}
                   </Button>
