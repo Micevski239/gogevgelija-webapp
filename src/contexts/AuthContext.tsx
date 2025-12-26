@@ -14,7 +14,7 @@ interface AuthContextType {
   isGuest: boolean;
   guestId: string | undefined;
   apiError: string | null;
-  signIn: (email: string, code: string) => Promise<void>;
+  signIn: (email: string, code: string, name?: string) => Promise<void>;
   signUp: (email: string, name: string, code: string) => Promise<void>;
   signOut: () => Promise<void>;
   refreshUser: () => Promise<void>;
