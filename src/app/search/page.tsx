@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { searchService } from '@/lib/api/services';
 import { ListingCard } from '@/components/cards/ListingCard';
 import { EventCard } from '@/components/cards/EventCard';
@@ -15,6 +15,14 @@ import { Search } from 'lucide-react';
 type SearchTab = 'all' | 'listings' | 'events' | 'promotions' | 'blogs';
 
 export default function SearchPage() {
+  return (
+    <Suspense fallback={<SearchFallback />}>
+      <SearchContent />
+    </Suspense>
+  );
+}
+
+function SearchContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
   const [activeTab, setActiveTab] = useState<SearchTab>('all');
@@ -201,6 +209,18 @@ export default function SearchPage() {
             )}
           </>
         )}
+      </div>
+    </div>
+  );
+}
+
+function SearchFallback() {
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-center py-20">
+          <Spinner size="lg" />
+        </div>
       </div>
     </div>
   );
