@@ -126,7 +126,9 @@ END:VCALENDAR`;
     );
   }
 
-  const images = event.images || [event.image || event.cover_image].filter(Boolean);
+  const images = (event.images ?? [event.image || event.cover_image]).filter(
+    (img): img is string => Boolean(img)
+  );
   const lightboxSlides = images.map((img) => ({ src: img }));
 
   return (
