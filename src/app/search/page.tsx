@@ -8,14 +8,16 @@ import { ListingCard } from '@/components/cards/ListingCard';
 import { EventCard } from '@/components/cards/EventCard';
 import { PromotionCard } from '@/components/cards/PromotionCard';
 import { BlogCard } from '@/components/cards/BlogCard';
-import { Tabs } from '@/components/ui/Tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { Spinner } from '@/components/ui/Spinner';
 import { Search } from 'lucide-react';
+
+type SearchTab = 'all' | 'listings' | 'events' | 'promotions' | 'blogs';
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
-  const [activeTab, setActiveTab] = useState<'all' | 'listings' | 'events' | 'promotions' | 'blogs'>('all');
+  const [activeTab, setActiveTab] = useState<SearchTab>('all');
 
   const { data, isLoading } = useQuery({
     queryKey: ['search', query, activeTab],
@@ -72,11 +74,27 @@ export default function SearchPage() {
         ) : (
           <>
             <Tabs
-              tabs={tabs}
-              activeTab={activeTab}
-              onChange={(value) => setActiveTab(value as typeof activeTab)}
+              defaultValue="all"
+              value={activeTab}
+              onValueChange={(value) => setActiveTab(value as SearchTab)}
               className="mb-8"
-            />
+            >
+              <TabsList className="flex flex-wrap gap-2 bg-transparent p-0">
+                {tabs.map((tab) => (
+                  <TabsTrigger
+                    key={tab.value}
+                    value={tab.value}
+                    className={`rounded-full border px-4 py-2 text-sm font-semibold transition-colors
+                      ${activeTab === tab.value
+                        ? 'bg-primary text-white border-primary shadow-lg'
+                        : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-primary/50'}
+                    `}
+                  >
+                    {tab.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
 
             {activeTab === 'all' && (
               <div className="space-y-12">
