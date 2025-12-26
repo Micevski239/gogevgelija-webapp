@@ -18,7 +18,7 @@ const AVATAR_OPTIONS = [
 
 export default function ProfilePage() {
   const { user, signOut } = useAuth();
-  const { currentLanguage, setLanguage } = useLanguage();
+  const { language, setLanguage } = useLanguage();
   const { showToast } = useToast();
 
   const [loading, setLoading] = useState(false);
@@ -175,7 +175,7 @@ export default function ProfilePage() {
                   onClick={() => handleLanguageChange('en')}
                   className={`
                     px-6 py-4 rounded-lg border-2 font-semibold transition-all
-                    ${currentLanguage === 'en'
+                    ${language === 'en'
                       ? 'border-primary bg-primary/10 text-primary'
                       : 'border-gray-200 dark:border-gray-700 hover:border-primary/50'
                     }
@@ -187,7 +187,7 @@ export default function ProfilePage() {
                   onClick={() => handleLanguageChange('mk')}
                   className={`
                     px-6 py-4 rounded-lg border-2 font-semibold transition-all
-                    ${currentLanguage === 'mk'
+                    ${language === 'mk'
                       ? 'border-primary bg-primary/10 text-primary'
                       : 'border-gray-200 dark:border-gray-700 hover:border-primary/50'
                     }
