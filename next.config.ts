@@ -52,6 +52,8 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react'],
   },
+  // Explicitly acknowledge Turbopack usage alongside webpack plugins
+  turbopack: {},
 };
 
 export default withPWA(nextConfig);
