@@ -24,6 +24,11 @@ export default function BlogDetailPage() {
   if (!blog) return <div className="container mx-auto px-4 py-12 text-center"><h1 className="text-2xl font-bold mb-4">Blog post not found</h1><Link href="/blogs" className="text-primary hover:underline">Back to Blog</Link></div>;
 
   const coverImage = blog.cover_image || blog.image || (blog.images && blog.images[0]);
+  const tags = Array.isArray(blog.tags)
+    ? blog.tags
+    : typeof blog.tags === 'string'
+      ? [blog.tags]
+      : blog.tags?.tags ?? [];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -78,11 +83,11 @@ export default function BlogDetailPage() {
             <div dangerouslySetInnerHTML={{ __html: blog.content.replace(/\n/g, '<br />') }} />
           </div>
 
-          {blog.tags && blog.tags.length > 0 && (
+          {tags.length > 0 && (
             <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Tags</h3>
               <div className="flex flex-wrap gap-2">
-                {(Array.isArray(blog.tags) ? blog.tags : [blog.tags]).map((tag, idx) => (
+                {tags.map((tag, idx) => (
                   <Badge key={idx} variant="outline">{tag}</Badge>
                 ))}
               </div>
