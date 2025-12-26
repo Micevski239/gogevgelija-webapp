@@ -36,7 +36,8 @@ export function ListingCard({ listing, variant = 'grid', showDetails = true }: L
     : [listing.thumbnail_image || listing.image_medium || listing.image || '/placeholder.jpg'];
 
   // Mock rating (you can get this from API)
-  const rating = listing.rating || 4.5;
+  const ratingValue = typeof listing.rating === 'number' ? listing.rating : Number(listing.rating);
+  const rating = Number.isFinite(ratingValue) ? ratingValue : 4.5;
   const reviewCount = 128; // Mock data
   const priceRange = '$$'; // Mock data
 
