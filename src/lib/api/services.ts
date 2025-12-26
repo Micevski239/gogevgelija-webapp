@@ -12,6 +12,7 @@ import {
   User,
   EditListingRequest,
   PaginatedResponse,
+  SearchResults,
 } from '@/types';
 
 export const categoryService = {
@@ -179,6 +180,12 @@ export const listingService = {
   getFeatured: async (): Promise<Listing[]> => {
     const response = await api.get('/api/listings/featured/');
     return response.data;
+  },
+
+  getTrending: async (): Promise<Listing[]> => {
+    const response = await api.get('/api/listings/trending/');
+    // Handle both paginated and non-paginated responses
+    return response.data.results || response.data;
   },
 
   getByCategory: async (category: string): Promise<Listing[]> => {
@@ -506,6 +513,24 @@ export const authService = {
 
   getCurrentUser: async (): Promise<User> => {
     const response = await api.get('/api/auth/me/');
+    return response.data;
+  },
+};
+
+export const searchService = {
+  /**
+   * Global search across all content types
+   * @param query - Search query (minimum 2 characters)
+   * @param type - Content type to search: 'all', 'listings', 'events', 'promotions', 'blogs'
+   * @param limit - Maximum results per type (default: 20)
+   */
+  globalSearch: async (
+    query: string,
+    type: 'all' | 'listings' | 'events' | 'promotions' | 'blogs' = 'all',
+    limit: number = 20
+  ): Promise<SearchResults> => {
+    const params = new URLSearchParams({ q: query, type, limit: String(limit) });
+    const response = await api.get(`/api/search/?${params}`);
     return response.data;
   },
 };

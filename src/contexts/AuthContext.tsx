@@ -65,12 +65,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signIn = async (email: string, code: string) => {
+  const signIn = async (email: string, code: string, name?: string) => {
     try {
       setTransitioning(true);
       setApiError(null);
 
-      const response = await authService.verifyCode({ email, code });
+      const response = await authService.verifyCode({ email, code, name });
 
       await saveTokens(response.access, response.refresh);
       setUser(response.user);

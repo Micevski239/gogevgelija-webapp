@@ -21,7 +21,7 @@ export interface Category {
   featured?: boolean;
 
   // Scope
-  applies_to?: ('listing' | 'event' | 'both')[];
+  applies_to?: 'listing' | 'event' | 'both';
 
   // Metadata
   description?: string;
@@ -65,7 +65,9 @@ export interface Listing {
   facebook_url?: string;
   instagram_url?: string;
   website_url?: string;
+  google_maps_url?: string;
   featured: boolean;
+  trending: boolean;
   promotions?: Promotion[];
   events?: Event[];
   created_at: string;
@@ -91,19 +93,22 @@ export interface Event {
   image_thumbnail?: string | null;
   image_medium?: string | null;
   cover_image?: string;
-  entry_price: string;
+  entry_price: string | null;
   category: Category | null;
-  age_limit: string;
+  age_limit: string | null;
   expectations: EventExpectation[];
   join_count: number;
   has_joined: boolean;
   featured: boolean;
+  trending?: boolean;
+  rating?: number | string | null;
   is_active?: boolean;
   show_join_button: boolean;
   phone_number?: string;
   facebook_url?: string;
   instagram_url?: string;
   website_url?: string;
+  google_maps_url?: string;
   listings?: Listing[];
   created_at: string;
   updated_at: string;
@@ -125,7 +130,7 @@ export interface MinimalEvent {
   image?: string;
   image_thumbnail?: string | null;
   category?: Category | null;
-  entry_price?: string;
+  entry_price?: string | null;
 }
 
 export interface Promotion {
@@ -134,6 +139,7 @@ export interface Promotion {
   description: string;
   has_discount_code: boolean;
   discount_code: string;
+  discount_percent?: number;
   tags?: string[] | { tags?: string[] } | string | null;
   image: string;
   images?: string[];
@@ -141,12 +147,15 @@ export interface Promotion {
   image_thumbnail?: string | null;
   image_medium?: string | null;
   valid_until: string | null;
+  category?: Category | null;
   featured: boolean;
+  trending?: boolean;
   website?: string;
   phone_number?: string;
   facebook_url?: string;
   instagram_url?: string;
   address?: string;
+  google_maps_url?: string;
   listings?: MinimalListing[];
   created_at: string;
   updated_at: string;
@@ -248,6 +257,16 @@ export interface PaginatedResponse<T> {
   next: string | null;
   previous: string | null;
   results: T[];
+}
+
+// Search results
+export interface SearchResults {
+  listings: Listing[];
+  events: Event[];
+  promotions: Promotion[];
+  blogs: Blog[];
+  total_count: number;
+  query: string;
 }
 
 // API Error types

@@ -1,0 +1,110 @@
+/* Glassmorphism Effects */
+.glass {
+  @apply bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl;
+}
+
+.glass-dark {
+  @apply bg-gray-900/10 backdrop-blur-lg border border-gray-800/20 shadow-xl;
+}
+
+/* Gradient Text */
+.gradient-text {
+  @apply bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 bg-clip-text text-transparent;
+}
+
+.gradient-text-blue {
+  @apply bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent;
+}
+
+/* Animated Gradients */
+.gradient-bg {
+  @apply bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500;
+  background-size: 200% 200%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 3D Hover Effects */
+.hover-3d {
+  @apply transition-all duration-300;
+}
+
+.hover-3d:hover {
+  transform: translateY(-4px) scale(1.02);
+  @apply shadow-2xl;
+}
+
+/* Shimmer Loading Effect */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Neon Glow */
+.neon-glow {
+  @apply relative;
+}
+
+.neon-glow::before {
+  content: '';
+  @apply absolute inset-0 opacity-50 blur-xl;
+  background: inherit;
+}
+
+/* Floating Animation */
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Pulse Glow */
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 20px 10px rgba(59, 130, 246, 0);
+  }
+}

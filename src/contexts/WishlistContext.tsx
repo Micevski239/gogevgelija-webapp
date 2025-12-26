@@ -26,12 +26,23 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   const { authed, isGuest } = useAuth();
   const { showToast } = useToast();
 
-  // Load wishlist when user is authenticated
+  // Load wishlist when user is authenticated or from localStorage for guests
   useEffect(() => {
     if (authed && !isGuest) {
       refreshWishlist();
     } else {
-      setWishlistItems([]);
+      // Load from localStorage for guests
+      const stored = localStorage.getItem('gogevgelija_wishlist_guest');
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          setWishlistItems(Array.isArray(parsed) ? parsed : []);
+        } catch (e) {
+          setWishlistItems([]);
+        }
+      } else {
+        setWishlistItems([]);
+      }
     }
   }, [authed, isGuest]);
 
@@ -52,16 +63,28 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   };
 
   const addToWishlist = async (request: WishlistAddRequest) => {
-    if (!authed || isGuest) {
-      showToast('Please login to add items to wishlist', 'error');
-      return;
-    }
-
     try {
       setError(null);
-      const newItem = await wishlistService.add(request);
-      setWishlistItems((prev) => [...prev, newItem]);
-      showToast('Added to wishlist', 'success');
+
+      if (authed && !isGuest) {
+        // API for logged-in users
+        const newItem = await wishlistService.add(request);
+        setWishlistItems((prev) => [...prev, newItem]);
+        showToast('Added to wishlist', 'success');
+      } else {
+        // localStorage for guests
+        const guestItem: WishlistItem = {
+          id: `guest-${request.item_type}-${request.item_id}`,
+          item_type: request.item_type,
+          item_data: request as any, // Store the full object
+          created_at: new Date().toISOString(),
+        };
+
+        const updated = [...wishlistItems, guestItem];
+        setWishlistItems(updated);
+        localStorage.setItem('gogevgelija_wishlist_guest', JSON.stringify(updated));
+        showToast('Added to wishlist (login to sync across devices)', 'success');
+      }
     } catch (err: any) {
       console.error('Error adding to wishlist:', err);
       const message = err?.response?.data?.error || 'Failed to add to wishlist';
@@ -71,23 +94,30 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   };
 
   const removeFromWishlist = async (request: WishlistRemoveRequest) => {
-    if (!authed || isGuest) return;
-
     try {
       setError(null);
-      // Optimistic update
-      setWishlistItems((prev) =>
-        prev.filter(
-          (item) => !(item.item_type === request.item_type && item.item_data.id === request.item_id)
-        )
-      );
 
-      await wishlistService.remove(request);
+      // Optimistic update
+      const updated = wishlistItems.filter(
+        (item) => !(item.item_type === request.item_type && item.item_data.id === request.item_id)
+      );
+      setWishlistItems(updated);
+
+      if (authed && !isGuest) {
+        // API for logged-in users
+        await wishlistService.remove(request);
+      } else {
+        // localStorage for guests
+        localStorage.setItem('gogevgelija_wishlist_guest', JSON.stringify(updated));
+      }
+
       showToast('Removed from wishlist', 'success');
     } catch (err: any) {
       console.error('Error removing from wishlist:', err);
       // Revert on error
-      await refreshWishlist();
+      if (authed && !isGuest) {
+        await refreshWishlist();
+      }
       const message = err?.response?.data?.error || 'Failed to remove from wishlist';
       setError(message);
       showToast(message, 'error');

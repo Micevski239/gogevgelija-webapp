@@ -1,150 +1,187 @@
 'use client';
 
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { listingService, categoryService } from '@/lib/api/services';
+import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { searchService } from '@/lib/api/services';
 import { ListingCard } from '@/components/cards/ListingCard';
-import { useLanguage } from '@/contexts/LanguageContext';
-import { Loader2, Search, Filter } from 'lucide-react';
-import { Input } from '@/components/ui/Input';
+import { EventCard } from '@/components/cards/EventCard';
+import { PromotionCard } from '@/components/cards/PromotionCard';
+import { BlogCard } from '@/components/cards/BlogCard';
+import { Tabs } from '@/components/ui/Tabs';
+import { Spinner } from '@/components/ui/Spinner';
+import { Search } from 'lucide-react';
 
 export default function SearchPage() {
-  const { t } = useLanguage();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
+  const searchParams = useSearchParams();
+  const query = searchParams.get('q') || '';
+  const [activeTab, setActiveTab] = useState<'all' | 'listings' | 'events' | 'promotions' | 'blogs'>('all');
 
-  // Fetch all listings
-  const { data: listings, isLoading } = useQuery({
-    queryKey: ['listings', 'all'],
-    queryFn: () => listingService.getAll(),
+  const { data, isLoading } = useQuery({
+    queryKey: ['search', query, activeTab],
+    queryFn: () => searchService.globalSearch(query, activeTab),
+    enabled: query.length >= 2,
   });
 
-  // Fetch categories
-  const { data: categories } = useQuery({
-    queryKey: ['categories', 'listings'],
-    queryFn: () => categoryService.getForListings(),
-  });
+  const totalResults = data ? data.listings.length + data.events.length + data.promotions.length + data.blogs.length : 0;
 
-  // Filter listings
-  const filteredListings = listings?.filter((listing) => {
-    const matchesSearch = searchQuery
-      ? listing.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        listing.description?.toLowerCase().includes(searchQuery.toLowerCase())
-      : true;
+  const tabs = [
+    { value: 'all', label: `All (${totalResults})` },
+    { value: 'listings', label: `Listings (${data?.listings.length || 0})` },
+    { value: 'events', label: `Events (${data?.events.length || 0})` },
+    { value: 'promotions', label: `Promotions (${data?.promotions.length || 0})` },
+    { value: 'blogs', label: `Blogs (${data?.blogs.length || 0})` },
+  ];
 
-    const matchesCategory = selectedCategory
-      ? listing.category?.id === parseInt(selectedCategory)
-      : true;
-
-    return matchesSearch && matchesCategory;
-  });
+  if (query.length < 2) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <Search className="h-16 w-16 text-gray-400 mb-4" />
+            <h1 className="text-2xl font-bold mb-2">Search GoGevgelija</h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Enter at least 2 characters to start searching
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-light-bg dark:bg-dark-bg py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="container mx-auto px-4">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-light-text dark:text-dark-text mb-2">
-            {t('common.search')} {t('common.listings')}
-          </h1>
-          <p className="text-light-text-secondary dark:text-dark-text-secondary">
-            Discover restaurants, hotels, and attractions in Gevgelija
-          </p>
-        </div>
+        <h1 className="text-3xl md:text-4xl font-bold mb-2">Search Results</h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-8">
+          Results for: <span className="font-semibold text-gray-900 dark:text-white">{query}</span>
+        </p>
 
-        {/* Filters */}
-        <div className="mb-8 bg-light-card dark:bg-dark-card rounded-lg p-4 shadow-sm border border-light-border dark:border-dark-border">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Search Input */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-light-text-secondary dark:text-dark-text-secondary" />
-              <Input
-                type="text"
-                placeholder="Search by name or description..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-
-            {/* Category Filter */}
-            <div className="relative">
-              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-light-text-secondary dark:text-dark-text-secondary pointer-events-none" />
-              <select
-                value={selectedCategory || ''}
-                onChange={(e) => setSelectedCategory(e.target.value || undefined)}
-                className="flex h-12 w-full rounded-lg border px-4 pl-10 py-2 text-base bg-light-bg dark:bg-dark-bg border-light-border dark:border-dark-border text-light-text dark:text-dark-text focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-              >
-                <option value="">All Categories</option>
-                {categories?.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Active Filters */}
-          {(searchQuery || selectedCategory) && (
-            <div className="mt-3 flex items-center gap-2 flex-wrap">
-              <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                Active filters:
-              </span>
-              {searchQuery && (
-                <span className="px-2 py-1 bg-primary/10 text-primary rounded text-sm font-medium">
-                  Search: "{searchQuery}"
-                </span>
-              )}
-              {selectedCategory && categories && (
-                <span className="px-2 py-1 bg-primary/10 text-primary rounded text-sm font-medium">
-                  {categories.find((c) => c.id === parseInt(selectedCategory))?.name}
-                </span>
-              )}
-              <button
-                onClick={() => {
-                  setSearchQuery('');
-                  setSelectedCategory(undefined);
-                }}
-                className="text-sm text-primary hover:text-primary/80 font-medium"
-              >
-                Clear all
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Results */}
         {isLoading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <div className="flex justify-center py-20">
+            <Spinner size="lg" />
           </div>
-        ) : filteredListings && filteredListings.length > 0 ? (
-          <>
-            <div className="mb-4 text-sm text-light-text-secondary dark:text-dark-text-secondary">
-              Showing {filteredListings.length} result{filteredListings.length !== 1 ? 's' : ''}
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredListings.map((listing) => (
-                <ListingCard key={listing.id} listing={listing} />
-              ))}
-            </div>
-          </>
-        ) : (
+        ) : totalResults === 0 ? (
           <div className="text-center py-20">
-            <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-              No listings found matching your criteria.
+            <Search className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold mb-2">No results found</h2>
+            <p className="text-gray-600 dark:text-gray-400">
+              Try searching with different keywords
             </p>
-            <button
-              onClick={() => {
-                setSearchQuery('');
-                setSelectedCategory(undefined);
-              }}
-              className="text-primary hover:text-primary/80 font-semibold"
-            >
-              Clear filters
-            </button>
           </div>
+        ) : (
+          <>
+            <Tabs
+              tabs={tabs}
+              activeTab={activeTab}
+              onChange={(value) => setActiveTab(value as typeof activeTab)}
+              className="mb-8"
+            />
+
+            {activeTab === 'all' && (
+              <div className="space-y-12">
+                {data && data.listings.length > 0 && (
+                  <div>
+                    <h2 className="text-2xl font-bold mb-4">Listings ({data.listings.length})</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                      {data.listings.map(listing => (
+                        <ListingCard key={listing.id} listing={listing} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {data && data.events.length > 0 && (
+                  <div>
+                    <h2 className="text-2xl font-bold mb-4">Events ({data.events.length})</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                      {data.events.map(event => (
+                        <EventCard key={event.id} event={event} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {data && data.promotions.length > 0 && (
+                  <div>
+                    <h2 className="text-2xl font-bold mb-4">Promotions ({data.promotions.length})</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                      {data.promotions.map(promotion => (
+                        <PromotionCard key={promotion.id} promotion={promotion} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {data && data.blogs.length > 0 && (
+                  <div>
+                    <h2 className="text-2xl font-bold mb-4">Blog Articles ({data.blogs.length})</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {data.blogs.map(blog => (
+                        <BlogCard key={blog.id} blog={blog} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'listings' && data && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {data.listings.length > 0 ? (
+                  data.listings.map(listing => (
+                    <ListingCard key={listing.id} listing={listing} />
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-20 text-gray-600 dark:text-gray-400">
+                    No listings found
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'events' && data && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {data.events.length > 0 ? (
+                  data.events.map(event => (
+                    <EventCard key={event.id} event={event} />
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-20 text-gray-600 dark:text-gray-400">
+                    No events found
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'promotions' && data && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {data.promotions.length > 0 ? (
+                  data.promotions.map(promotion => (
+                    <PromotionCard key={promotion.id} promotion={promotion} />
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-20 text-gray-600 dark:text-gray-400">
+                    No promotions found
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'blogs' && data && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {data.blogs.length > 0 ? (
+                  data.blogs.map(blog => (
+                    <BlogCard key={blog.id} blog={blog} />
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-20 text-gray-600 dark:text-gray-400">
+                    No blog articles found
+                  </div>
+                )}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

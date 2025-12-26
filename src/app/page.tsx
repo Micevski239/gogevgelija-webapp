@@ -1,17 +1,76 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { listingService, eventService, promotionService } from '@/lib/api/services';
+import { listingService, eventService, promotionService, blogService } from '@/lib/api/services';
 import { ListingCard } from '@/components/cards/ListingCard';
 import { EventCard } from '@/components/cards/EventCard';
+import { PromotionCard } from '@/components/cards/PromotionCard';
+import { BlogCard } from '@/components/cards/BlogCard';
+import { HeroSection } from '@/components/home/HeroSection';
+import { CategoryCard } from '@/components/home/CategoryCard';
+import { TrustBadges } from '@/components/home/TrustBadges';
+import { StaggeredGrid, StaggeredGridItem } from '@/components/animations/StaggeredGrid';
+import { FadeIn } from '@/components/animations/FadeIn';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
-import { ArrowRight, Loader2 } from 'lucide-react';
+import { ArrowRight, Loader2, UtensilsCrossed, Hotel, Palmtree, Calendar, ShoppingBag, Music } from 'lucide-react';
 
 export default function HomePage() {
   const { t } = useLanguage();
   const { user, authed, isGuest } = useAuth();
+
+  // Category cards data
+  const categories = [
+    {
+      title: 'Restaurants',
+      description: 'Discover the best dining experiences in Gevgelija',
+      icon: UtensilsCrossed,
+      href: '/search?category=restaurants',
+      count: 120,
+      gradient: 'bg-gradient-to-br from-orange-500 to-red-600',
+    },
+    {
+      title: 'Hotels',
+      description: 'Find your perfect accommodation',
+      icon: Hotel,
+      href: '/search?category=hotels',
+      count: 45,
+      gradient: 'bg-gradient-to-br from-blue-500 to-cyan-600',
+    },
+    {
+      title: 'Attractions',
+      description: 'Explore amazing places and activities',
+      icon: Palmtree,
+      href: '/search?category=attractions',
+      count: 80,
+      gradient: 'bg-gradient-to-br from-green-500 to-emerald-600',
+    },
+    {
+      title: 'Events',
+      description: 'Join exciting events and gatherings',
+      icon: Calendar,
+      href: '/events',
+      count: 25,
+      gradient: 'bg-gradient-to-br from-purple-500 to-pink-600',
+    },
+    {
+      title: 'Shopping',
+      description: 'Discover local shops and boutiques',
+      icon: ShoppingBag,
+      href: '/search?category=shopping',
+      count: 60,
+      gradient: 'bg-gradient-to-br from-pink-500 to-rose-600',
+    },
+    {
+      title: 'Nightlife',
+      description: 'Experience the vibrant nightlife',
+      icon: Music,
+      href: '/search?category=nightlife',
+      count: 35,
+      gradient: 'bg-gradient-to-br from-indigo-500 to-purple-600',
+    },
+  ];
 
   // Fetch featured listings
   const { data: featuredListings, isLoading: listingsLoading } = useQuery({
@@ -25,6 +84,18 @@ export default function HomePage() {
     queryFn: () => eventService.getFeatured(),
   });
 
+  // Fetch featured promotions
+  const { data: featuredPromotions, isLoading: promotionsLoading } = useQuery({
+    queryKey: ['promotions', 'featured'],
+    queryFn: () => promotionService.getFeatured(),
+  });
+
+  // Fetch featured blogs
+  const { data: featuredBlogs, isLoading: blogsLoading } = useQuery({
+    queryKey: ['blogs', 'featured'],
+    queryFn: () => blogService.getFeatured(),
+  });
+
   // Get greeting based on time of day
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -34,84 +105,74 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary/10 via-light-bg dark:via-dark-bg to-accent/10 dark:from-primary-dark/10 dark:to-accent-dark/10 py-12 md:py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl">
-            {/* Greeting */}
-            {authed && user && (
-              <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">
-                {getGreeting()},
-              </p>
-            )}
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Premium Hero Section */}
+      <HeroSection
+        backgroundImage="https://images.unsplash.com/photo-1601513445506-2ab0d4fb4229?w=1920&q=80"
+        title={authed && user ? `Welcome back, ${user.username || user.email}!` : "Discover Amazing Places in Gevgelija"}
+        subtitle="Explore local attractions, events, and experiences with our commercial-grade platform"
+        showSearch={true}
+        showStats={true}
+      />
 
-            {/* Main Heading */}
-            <h1 className="text-3xl md:text-5xl font-bold text-light-text dark:text-dark-text mb-4">
-              {authed && user ? (
-                <>
-                  {user.username || user.email}!
-                </>
-              ) : isGuest ? (
-                <>Welcome to GoGevgelija</>
-              ) : (
-                <>Discover Gevgelija</>
-              )}
-            </h1>
-
-            <p className="text-lg md:text-xl text-light-text-secondary dark:text-dark-text-secondary mb-8">
-              Explore the best restaurants, events, promotions, and local stories in Gevgelija, North Macedonia
+      {/* Categories Section */}
+      <section className="py-16 container mx-auto px-4">
+        <FadeIn direction="up">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Explore by Category
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              Find exactly what you're looking for
             </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link
-                href="/search"
-                className="px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition-all shadow-lg inline-flex items-center justify-center gap-2"
-              >
-                Explore Listings
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/events"
-                className="px-6 py-3 border-2 border-primary text-primary rounded-lg font-semibold hover:bg-primary/5 transition-all inline-flex items-center justify-center gap-2"
-              >
-                View Events
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
           </div>
-        </div>
+        </FadeIn>
+
+        <StaggeredGrid className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {categories.map((category) => (
+            <StaggeredGridItem key={category.title}>
+              <CategoryCard {...category} />
+            </StaggeredGridItem>
+          ))}
+        </StaggeredGrid>
       </section>
 
       {/* Featured Listings Section */}
-      <section className="py-12 bg-light-bg dark:bg-dark-bg">
+      <section className="py-16 bg-white dark:bg-gray-800">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-light-text dark:text-dark-text">
-              {t('common.featured')} {t('common.listings')}
-            </h2>
-            <Link
-              href="/search"
-              className="text-primary hover:text-primary/80 font-semibold text-sm flex items-center gap-1 transition-colors"
-            >
-              {t('common.seeAll')}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
+          <FadeIn direction="up">
+            <div className="flex items-center justify-between mb-12">
+              <div>
+                <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                  Featured Places
+                </h2>
+                <p className="text-lg text-gray-600 dark:text-gray-400">
+                  Hand-picked by our team
+                </p>
+              </div>
+              <Link
+                href="/search"
+                className="text-primary hover:text-primary/80 font-semibold flex items-center gap-1 transition-colors"
+              >
+                View all <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </FadeIn>
 
           {listingsLoading ? (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
           ) : featuredListings && featuredListings.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <StaggeredGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {featuredListings.slice(0, 8).map((listing) => (
-                <ListingCard key={listing.id} listing={listing} />
+                <StaggeredGridItem key={listing.id}>
+                  <ListingCard listing={listing} variant="grid" />
+                </StaggeredGridItem>
               ))}
-            </div>
+            </StaggeredGrid>
           ) : (
-            <div className="text-center py-20 text-light-text-secondary dark:text-dark-text-secondary">
+            <div className="text-center py-20 text-gray-500 dark:text-gray-400">
               <p>No featured listings available at the moment.</p>
             </div>
           )}
@@ -119,97 +180,133 @@ export default function HomePage() {
       </section>
 
       {/* Upcoming Events Section */}
-      <section className="py-12 bg-light-surface dark:bg-dark-surface">
+      <section className="py-16 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-light-text dark:text-dark-text">
-              {t('home.upcomingEvents')}
-            </h2>
-            <Link
-              href="/events"
-              className="text-primary hover:text-primary/80 font-semibold text-sm flex items-center gap-1 transition-colors"
-            >
-              {t('common.seeAll')}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
+          <FadeIn direction="up">
+            <div className="flex items-center justify-between mb-12">
+              <div>
+                <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                  Upcoming Events
+                </h2>
+                <p className="text-lg text-gray-600 dark:text-gray-400">
+                  Join the excitement
+                </p>
+              </div>
+              <Link
+                href="/events"
+                className="text-primary hover:text-primary/80 font-semibold flex items-center gap-1 transition-colors"
+              >
+                View all <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </FadeIn>
 
           {eventsLoading ? (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
           ) : featuredEvents && featuredEvents.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <StaggeredGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {featuredEvents.slice(0, 4).map((event) => (
-                <EventCard key={event.id} event={event} />
+                <StaggeredGridItem key={event.id}>
+                  <EventCard event={event} variant="grid" />
+                </StaggeredGridItem>
               ))}
-            </div>
+            </StaggeredGrid>
           ) : (
-            <div className="text-center py-20 text-light-text-secondary dark:text-dark-text-secondary">
+            <div className="text-center py-20 text-gray-500 dark:text-gray-400">
               <p>No upcoming events at the moment.</p>
             </div>
           )}
         </div>
       </section>
 
-      {/* Quick Links Section */}
-      <section className="py-12 bg-light-bg dark:bg-dark-bg">
+      {/* Promotions Section */}
+      <section className="py-16 bg-gradient-to-br from-red-50 to-orange-50 dark:from-gray-800 dark:to-gray-900">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Link
-              href="/search?category=restaurants"
-              className="p-6 bg-light-card dark:bg-dark-card rounded-lg border border-light-border dark:border-dark-border hover:shadow-md transition-all group"
-            >
-              <div className="text-4xl mb-3">🍽️</div>
-              <h3 className="text-xl font-bold text-light-text dark:text-dark-text mb-2 group-hover:text-primary transition-colors">
-                Restaurants
-              </h3>
-              <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                Discover local cuisine and dining experiences
-              </p>
-            </Link>
+          <FadeIn direction="up">
+            <div className="flex items-center justify-between mb-12">
+              <div>
+                <h2 className="text-4xl font-bold mb-2">
+                  <span className="gradient-text">🔥 Hot Deals</span>
+                </h2>
+                <p className="text-lg text-gray-600 dark:text-gray-400">
+                  Limited time offers - don't miss out!
+                </p>
+              </div>
+              <Link
+                href="/promotions"
+                className="text-primary hover:text-primary/80 font-semibold flex items-center gap-1 transition-colors"
+              >
+                View all <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </FadeIn>
 
-            <Link
-              href="/events"
-              className="p-6 bg-light-card dark:bg-dark-card rounded-lg border border-light-border dark:border-dark-border hover:shadow-md transition-all group"
-            >
-              <div className="text-4xl mb-3">🎉</div>
-              <h3 className="text-xl font-bold text-light-text dark:text-dark-text mb-2 group-hover:text-primary transition-colors">
-                Events
-              </h3>
-              <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                Find concerts, festivals, and cultural activities
-              </p>
-            </Link>
-
-            <Link
-              href="/promotions"
-              className="p-6 bg-light-card dark:bg-dark-card rounded-lg border border-light-border dark:border-dark-border hover:shadow-md transition-all group"
-            >
-              <div className="text-4xl mb-3">🏷️</div>
-              <h3 className="text-xl font-bold text-light-text dark:text-dark-text mb-2 group-hover:text-primary transition-colors">
-                Promotions
-              </h3>
-              <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                Get the best deals and special offers
-              </p>
-            </Link>
-
-            <Link
-              href="/blog"
-              className="p-6 bg-light-card dark:bg-dark-card rounded-lg border border-light-border dark:border-dark-border hover:shadow-md transition-all group"
-            >
-              <div className="text-4xl mb-3">📚</div>
-              <h3 className="text-xl font-bold text-light-text dark:text-dark-text mb-2 group-hover:text-primary transition-colors">
-                Blog
-              </h3>
-              <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                Read travel guides and local stories
-              </p>
-            </Link>
-          </div>
+          {promotionsLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : featuredPromotions && featuredPromotions.length > 0 ? (
+            <StaggeredGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {featuredPromotions.slice(0, 4).map((promotion) => (
+                <StaggeredGridItem key={promotion.id}>
+                  <PromotionCard promotion={promotion} variant="grid" />
+                </StaggeredGridItem>
+              ))}
+            </StaggeredGrid>
+          ) : (
+            <div className="text-center py-20 text-gray-500 dark:text-gray-400">
+              <p>No promotions available at the moment.</p>
+            </div>
+          )}
         </div>
       </section>
+
+      {/* Latest Articles Section */}
+      <section className="py-16 bg-white dark:bg-gray-800">
+        <div className="container mx-auto px-4">
+          <FadeIn direction="up">
+            <div className="flex items-center justify-between mb-12">
+              <div>
+                <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                  Latest Articles
+                </h2>
+                <p className="text-lg text-gray-600 dark:text-gray-400">
+                  Stories and guides from Gevgelija
+                </p>
+              </div>
+              <Link
+                href="/blogs"
+                className="text-primary hover:text-primary/80 font-semibold flex items-center gap-1 transition-colors"
+              >
+                View all <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </FadeIn>
+
+          {blogsLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : featuredBlogs && featuredBlogs.length > 0 ? (
+            <StaggeredGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {featuredBlogs.slice(0, 3).map((blog) => (
+                <StaggeredGridItem key={blog.id}>
+                  <BlogCard blog={blog} />
+                </StaggeredGridItem>
+              ))}
+            </StaggeredGrid>
+          ) : (
+            <div className="text-center py-20 text-gray-500 dark:text-gray-400">
+              <p>No articles available at the moment.</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Trust Badges Section */}
+      <TrustBadges />
     </div>
   );
 }
