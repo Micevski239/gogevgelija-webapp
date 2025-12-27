@@ -108,7 +108,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Premium Hero Section */}
       <HeroSection
-        backgroundImage="https://images.unsplash.com/photo-1601513445506-2ab0d4fb4229?w=1920&q=80"
+        backgroundImage="/images/hero-bg.jpg"
         title={authed && user ? `Welcome back, ${user.username || user.email}!` : "Discover Amazing Places in Gevgelija"}
         subtitle="Explore local attractions, events, and experiences with our commercial-grade platform"
         showSearch={true}
