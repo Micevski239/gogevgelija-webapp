@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
+import Image from 'next/image';
 
 interface CategoryCardProps {
   title: string;
@@ -10,7 +11,8 @@ interface CategoryCardProps {
   icon: LucideIcon;
   href: string;
   count?: number;
-  gradient: string;
+  image?: string;
+  gradient?: string;
   iconColor?: string;
 }
 
@@ -20,6 +22,7 @@ export function CategoryCard({
   icon: Icon,
   href,
   count,
+  image,
   gradient,
   iconColor = 'text-white',
 }: CategoryCardProps) {
@@ -32,13 +35,27 @@ export function CategoryCard({
       >
         {/* Card Container */}
         <div className="h-full bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700">
-          {/* Gradient Background */}
-          <div className={`h-32 ${gradient} relative overflow-hidden`}>
-            {/* Animated Background Pattern */}
-            <div className="absolute inset-0 opacity-20">
-              <div className="absolute top-0 -left-4 w-24 h-24 bg-white rounded-full blur-2xl animate-pulse" />
-              <div className="absolute bottom-0 -right-4 w-32 h-32 bg-white rounded-full blur-3xl animate-pulse delay-700" />
-            </div>
+          {/* Image Background with Shadow Overlay */}
+          <div className="h-32 relative overflow-hidden">
+            {image ? (
+              <>
+                {/* Background Image */}
+                <Image
+                  src={image}
+                  alt={title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+                {/* Shadow Black Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+              </>
+            ) : (
+              <>
+                {/* Fallback Gradient Background */}
+                <div className={`h-full ${gradient || 'bg-gray-800'}`} />
+              </>
+            )}
 
             {/* Icon */}
             <div className="absolute inset-0 flex items-center justify-center">

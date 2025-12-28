@@ -28,7 +28,7 @@ export default function HomePage() {
       icon: UtensilsCrossed,
       href: '/search?category=restaurants',
       count: 120,
-      gradient: 'bg-gradient-to-br from-orange-500 to-red-600',
+      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80',
     },
     {
       title: 'Hotels',
@@ -36,7 +36,7 @@ export default function HomePage() {
       icon: Hotel,
       href: '/search?category=hotels',
       count: 45,
-      gradient: 'bg-gradient-to-br from-blue-500 to-cyan-600',
+      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80',
     },
     {
       title: 'Attractions',
@@ -44,7 +44,7 @@ export default function HomePage() {
       icon: Palmtree,
       href: '/search?category=attractions',
       count: 80,
-      gradient: 'bg-gradient-to-br from-green-500 to-emerald-600',
+      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
     },
     {
       title: 'Events',
@@ -52,7 +52,7 @@ export default function HomePage() {
       icon: Calendar,
       href: '/events',
       count: 25,
-      gradient: 'bg-gradient-to-br from-purple-500 to-pink-600',
+      image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
     },
     {
       title: 'Shopping',
@@ -60,7 +60,7 @@ export default function HomePage() {
       icon: ShoppingBag,
       href: '/search?category=shopping',
       count: 60,
-      gradient: 'bg-gradient-to-br from-pink-500 to-rose-600',
+      image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80',
     },
     {
       title: 'Nightlife',
@@ -68,7 +68,7 @@ export default function HomePage() {
       icon: Music,
       href: '/search?category=nightlife',
       count: 35,
-      gradient: 'bg-gradient-to-br from-indigo-500 to-purple-600',
+      image: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80',
     },
   ];
 
