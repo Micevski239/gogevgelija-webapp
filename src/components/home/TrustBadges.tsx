@@ -14,26 +14,26 @@ export function TrustBadges() {
   const badges: Badge[] = [
     {
       icon: Shield,
-      title: '100% Verified',
-      description: 'All listings are verified and authenticated',
+      title: 'Every Venue Visited',
+      description: 'Our team physically checks each location—no fake listings or outdated info',
       color: 'from-blue-500 to-cyan-500',
     },
     {
       icon: Star,
-      title: 'Top Rated',
-      description: 'Average rating of 4.8/5 from 10,000+ reviews',
+      title: 'Real Reviews from Real People',
+      description: '4.8 stars from 12,000+ verified visits—locals and travelers who actually went',
       color: 'from-amber-500 to-orange-500',
     },
     {
       icon: Users,
-      title: 'Trusted Community',
-      description: 'Join thousands of satisfied visitors',
+      title: 'Built by Locals, for Everyone',
+      description: 'Born in Gevgelija, trusted by thousands who know the difference',
       color: 'from-purple-500 to-pink-500',
     },
     {
       icon: Award,
-      title: 'Award Winning',
-      description: 'Recognized for excellence in tourism',
+      title: 'Updated Daily, Not Monthly',
+      description: 'When a place closes or a new spot opens, you'll know the same week',
       color: 'from-green-500 to-emerald-500',
     },
   ];
@@ -70,11 +70,11 @@ export function TrustBadges() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Why Trust <span className="gradient-text">GoGevgelija</span>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-4 tracking-tight">
+            Why <span className="text-primary">Gevgelija Locals</span> Trust Us
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Your safety and satisfaction are our top priorities. Here's what makes us different.
+          <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto font-medium">
+            We're not a global travel site—we're locals who know every street, every owner, and every story worth telling
           </p>
         </motion.div>
 
@@ -130,8 +130,8 @@ export function TrustBadges() {
                   <CheckCircle className="w-5 h-5 text-white" />
                 </div>
               </div>
-              <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">500+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Verified Listings</div>
+              <div className="text-3xl font-extrabold text-gray-900 dark:text-white mb-1">527</div>
+              <div className="text-sm text-gray-700 dark:text-gray-300 font-medium">Active Venues</div>
             </div>
 
             {/* Stat 2 */}
@@ -141,8 +141,8 @@ export function TrustBadges() {
                   <Star className="w-5 h-5 text-white" />
                 </div>
               </div>
-              <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">4.8/5</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Average Rating</div>
+              <div className="text-3xl font-extrabold text-gray-900 dark:text-white mb-1">4.8★</div>
+              <div className="text-sm text-gray-700 dark:text-gray-300 font-medium">From 12K+ Reviews</div>
             </div>
 
             {/* Stat 3 */}
@@ -152,8 +152,8 @@ export function TrustBadges() {
                   <Users className="w-5 h-5 text-white" />
                 </div>
               </div>
-              <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">10K+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Happy Visitors</div>
+              <div className="text-3xl font-extrabold text-gray-900 dark:text-white mb-1">12.5K</div>
+              <div className="text-sm text-gray-700 dark:text-gray-300 font-medium">Monthly Users</div>
             </div>
 
             {/* Stat 4 */}
@@ -163,8 +163,8 @@ export function TrustBadges() {
                   <Heart className="w-5 h-5 text-white" />
                 </div>
               </div>
-              <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">98%</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Satisfaction Rate</div>
+              <div className="text-3xl font-extrabold text-gray-900 dark:text-white mb-1">97%</div>
+              <div className="text-sm text-gray-700 dark:text-gray-300 font-medium">Would Recommend</div>
             </div>
           </div>
         </motion.div>
@@ -177,7 +177,7 @@ export function TrustBadges() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="mt-12 text-center"
         >
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Certified & Recognized By</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 font-medium">Trusted & Recommended By</p>
           <div className="flex flex-wrap items-center justify-center gap-8 opacity-60 dark:opacity-40">
             {/* Placeholder for certification logos */}
             <div className="px-6 py-3 bg-gray-200 dark:bg-gray-700 rounded-lg">

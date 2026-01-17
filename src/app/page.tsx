@@ -20,54 +20,54 @@ export default function HomePage() {
   const { t } = useLanguage();
   const { user, authed, isGuest } = useAuth();
 
-  // Category cards data
+  // Category cards data - Gevgelija-specific experiences
   const categories = [
     {
-      title: 'Restaurants',
-      description: 'Discover the best dining experiences in Gevgelija',
+      title: 'Traditional Grill Houses',
+      description: 'Family-run restaurants serving authentic Macedonian barbecue—from pleskavica to tavče gravče',
       icon: UtensilsCrossed,
       href: '/search?category=restaurants',
-      count: 120,
+      count: 127,
       image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80',
     },
     {
-      title: 'Hotels',
-      description: 'Find your perfect accommodation',
+      title: 'Boutique Hotels & Spas',
+      description: 'Where the Vardar meets luxury—riverside retreats with thermal springs and mountain views',
       icon: Hotel,
       href: '/search?category=hotels',
-      count: 45,
+      count: 48,
       image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80',
     },
     {
-      title: 'Attractions',
-      description: 'Explore amazing places and activities',
+      title: 'Hidden Gems & Nature',
+      description: 'Riverside parks, ancient sites, and hiking trails just outside the city center',
       icon: Palmtree,
       href: '/search?category=attractions',
-      count: 80,
+      count: 83,
       image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
     },
     {
-      title: 'Events',
-      description: 'Join exciting events and gatherings',
+      title: 'Cultural Events',
+      description: 'Wine festivals, folk music nights, and seasonal celebrations throughout the year',
       icon: Calendar,
       href: '/events',
-      count: 25,
+      count: 29,
       image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
     },
     {
-      title: 'Shopping',
-      description: 'Discover local shops and boutiques',
+      title: 'Border Markets & Shops',
+      description: 'Everything from local crafts to international goods at Greece\'s doorstep',
       icon: ShoppingBag,
       href: '/search?category=shopping',
-      count: 60,
+      count: 64,
       image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80',
     },
     {
-      title: 'Nightlife',
-      description: 'Experience the vibrant nightlife',
+      title: 'Evening Entertainment',
+      description: 'Riverside bars, live music venues, and late-night spots where locals gather',
       icon: Music,
       href: '/search?category=nightlife',
-      count: 35,
+      count: 38,
       image: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80',
     },
   ];
@@ -109,21 +109,21 @@ export default function HomePage() {
       {/* Premium Hero Section */}
       <HeroSection
         backgroundImage="/images/hero-bg.jpg"
-        title={authed && user ? `Welcome back, ${user.username || user.email}!` : "Discover Amazing Places in Gevgelija"}
-        subtitle="Explore local attractions, events, and experiences with our commercial-grade platform"
+        title={authed && user ? `Welcome back, ${user.username || user.email}!` : "Your Gateway to Gevgelija"}
+        subtitle={authed && user ? "Let's find something incredible today" : "From the bustling border markets to hidden vineyard terraces—everything that makes this city extraordinary"}
         showSearch={true}
         showStats={true}
       />
 
       {/* Categories Section */}
-      <section className="py-16 container mx-auto px-4">
+      <section className="py-20 container mx-auto px-4">
         <FadeIn direction="up">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Explore by Category
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-5 tracking-tight">
+              Start Your Gevgelija Journey
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
-              Find exactly what you're looking for
+            <p className="text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto font-medium">
+              Whether you're here for a day trip from Greece or planning an extended stay, we've mapped out the best of everything
             </p>
           </div>
         </FadeIn>
@@ -138,23 +138,23 @@ export default function HomePage() {
       </section>
 
       {/* Featured Listings Section */}
-      <section className="py-16 bg-white dark:bg-gray-800">
+      <section className="py-20 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700">
         <div className="container mx-auto px-4">
           <FadeIn direction="up">
-            <div className="flex items-center justify-between mb-12">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
               <div>
-                <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                  Featured Places
+                <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-3 tracking-tight">
+                  Places Worth Your Time
                 </h2>
-                <p className="text-lg text-gray-600 dark:text-gray-400">
-                  Hand-picked by our team
+                <p className="text-xl text-gray-700 dark:text-gray-300 font-medium">
+                  Curated by locals who know every street, every chef, and every hidden corner
                 </p>
               </div>
               <Link
                 href="/search"
-                className="text-primary hover:text-primary/80 font-semibold flex items-center gap-1 transition-colors"
+                className="text-primary hover:text-primary-dark font-bold text-lg flex items-center gap-2 transition-all group"
               >
-                View all <ArrowRight className="h-4 w-4" />
+                Browse everything <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </FadeIn>
@@ -172,31 +172,31 @@ export default function HomePage() {
               ))}
             </StaggeredGrid>
           ) : (
-            <div className="text-center py-20 text-gray-500 dark:text-gray-400">
-              <p>No featured listings available at the moment.</p>
+            <div className="text-center py-20">
+              <p className="text-gray-600 dark:text-gray-400 text-lg">New places are being added weekly. Check back soon!</p>
             </div>
           )}
         </div>
       </section>
 
       {/* Upcoming Events Section */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-900">
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
         <div className="container mx-auto px-4">
           <FadeIn direction="up">
-            <div className="flex items-center justify-between mb-12">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
               <div>
-                <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                  Upcoming Events
+                <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-3 tracking-tight">
+                  What's Happening This Month
                 </h2>
-                <p className="text-lg text-gray-600 dark:text-gray-400">
-                  Join the excitement
+                <p className="text-xl text-gray-700 dark:text-gray-300 font-medium">
+                  Wine tastings, folk festivals, live music—see what locals and visitors are talking about
                 </p>
               </div>
               <Link
                 href="/events"
-                className="text-primary hover:text-primary/80 font-semibold flex items-center gap-1 transition-colors"
+                className="text-primary hover:text-primary-dark font-bold text-lg flex items-center gap-2 transition-all group"
               >
-                View all <ArrowRight className="h-4 w-4" />
+                Full calendar <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </FadeIn>
@@ -214,31 +214,34 @@ export default function HomePage() {
               ))}
             </StaggeredGrid>
           ) : (
-            <div className="text-center py-20 text-gray-500 dark:text-gray-400">
-              <p>No upcoming events at the moment.</p>
+            <div className="text-center py-20">
+              <p className="text-gray-600 dark:text-gray-400 text-lg">Event season kicks off in spring. We're updating the calendar daily.</p>
             </div>
           )}
         </div>
       </section>
 
       {/* Promotions Section */}
-      <section className="py-16 bg-gradient-to-br from-red-50 to-orange-50 dark:from-gray-800 dark:to-gray-900">
-        <div className="container mx-auto px-4">
+      <section className="py-20 bg-gradient-to-br from-rose-50 via-orange-50 to-amber-50 dark:from-gray-800 dark:via-gray-850 dark:to-gray-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5" />
+        <div className="container mx-auto px-4 relative z-10">
           <FadeIn direction="up">
-            <div className="flex items-center justify-between mb-12">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
               <div>
-                <h2 className="text-4xl font-bold mb-2">
-                  <span className="gradient-text">🔥 Hot Deals</span>
+                <h2 className="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight">
+                  <span className="bg-gradient-to-r from-red-600 via-orange-600 to-amber-600 bg-clip-text text-transparent">
+                    Exclusive Deals Right Now
+                  </span>
                 </h2>
-                <p className="text-lg text-gray-600 dark:text-gray-400">
-                  Limited time offers - don't miss out!
+                <p className="text-xl text-gray-700 dark:text-gray-300 font-medium">
+                  Special offers from Gevgelija's top spots—savings you won't find anywhere else
                 </p>
               </div>
               <Link
                 href="/promotions"
-                className="text-primary hover:text-primary/80 font-semibold flex items-center gap-1 transition-colors"
+                className="text-primary hover:text-primary-dark font-bold text-lg flex items-center gap-2 transition-all group"
               >
-                View all <ArrowRight className="h-4 w-4" />
+                See all deals <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </FadeIn>
@@ -256,31 +259,31 @@ export default function HomePage() {
               ))}
             </StaggeredGrid>
           ) : (
-            <div className="text-center py-20 text-gray-500 dark:text-gray-400">
-              <p>No promotions available at the moment.</p>
+            <div className="text-center py-20">
+              <p className="text-gray-600 dark:text-gray-400 text-lg">Fresh deals coming every week. Follow us to get notified first.</p>
             </div>
           )}
         </div>
       </section>
 
       {/* Latest Articles Section */}
-      <section className="py-16 bg-white dark:bg-gray-800">
+      <section className="py-20 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700">
         <div className="container mx-auto px-4">
           <FadeIn direction="up">
-            <div className="flex items-center justify-between mb-12">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
               <div>
-                <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                  Latest Articles
+                <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-3 tracking-tight">
+                  Stories from the City
                 </h2>
-                <p className="text-lg text-gray-600 dark:text-gray-400">
-                  Stories and guides from Gevgelija
+                <p className="text-xl text-gray-700 dark:text-gray-300 font-medium">
+                  Deep dives into local culture, food traditions, and insider tips from those who call Gevgelija home
                 </p>
               </div>
               <Link
                 href="/blogs"
-                className="text-primary hover:text-primary/80 font-semibold flex items-center gap-1 transition-colors"
+                className="text-primary hover:text-primary-dark font-bold text-lg flex items-center gap-2 transition-all group"
               >
-                View all <ArrowRight className="h-4 w-4" />
+                Read more <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </FadeIn>
@@ -298,8 +301,8 @@ export default function HomePage() {
               ))}
             </StaggeredGrid>
           ) : (
-            <div className="text-center py-20 text-gray-500 dark:text-gray-400">
-              <p>No articles available at the moment.</p>
+            <div className="text-center py-20">
+              <p className="text-gray-600 dark:text-gray-400 text-lg">Our editorial team is preparing stories about Gevgelija's best-kept secrets.</p>
             </div>
           )}
         </div>

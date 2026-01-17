@@ -82,20 +82,21 @@ export function CategoryCard({
 
           {/* Content */}
           <div className="p-6">
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary transition-colors">
+            <h3 className="text-xl font-extrabold text-gray-900 dark:text-white mb-2.5 group-hover:text-primary transition-colors tracking-tight">
               {title}
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-4">
+            <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-2 mb-5 leading-relaxed font-medium">
               {description}
             </p>
 
             {/* CTA */}
-            <div className="flex items-center text-primary font-semibold text-sm group-hover:gap-2 transition-all">
-              <span>Explore</span>
+            <div className="flex items-center text-primary font-bold text-sm group-hover:gap-2.5 transition-all">
+              <span>Discover</span>
               <motion.span
                 initial={{ x: 0 }}
                 whileHover={{ x: 4 }}
                 transition={{ duration: 0.2 }}
+                className="text-lg"
               >
                 →
               </motion.span>

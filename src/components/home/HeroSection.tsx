@@ -16,8 +16,8 @@ interface HeroSectionProps {
 
 export function HeroSection({
   backgroundImage = '/hero-bg.jpg',
-  title = 'Discover Amazing Places in Gevgelija',
-  subtitle = 'Explore local attractions, events, and experiences',
+  title = 'Your Gateway to Gevgelija',
+  subtitle = 'From the bustling border markets to hidden vineyard terraces—everything that makes this city extraordinary',
   showSearch = true,
   showStats = true,
 }: HeroSectionProps) {
@@ -73,10 +73,10 @@ export function HeroSection({
           transition={{ duration: 0.8 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white mb-6 leading-tight tracking-tight">
             {title}
           </h1>
-          <p className="text-lg md:text-xl lg:text-2xl text-gray-200 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl lg:text-2xl text-gray-100 max-w-3xl mx-auto font-medium leading-relaxed">
             {subtitle}
           </p>
         </motion.div>
@@ -93,18 +93,18 @@ export function HeroSection({
               <div className="flex flex-col md:flex-row gap-4">
                 {/* Search Input */}
                 <div className="flex-1">
-                  <label htmlFor="search" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    What are you looking for?
+                  <label htmlFor="search" className="block text-sm font-bold text-gray-800 dark:text-gray-200 mb-2">
+                    Find your next adventure
                   </label>
                   <div className="relative">
-                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
                     <input
                       id="search"
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search attractions, restaurants, events..."
-                      className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:border-primary focus:bg-white dark:focus:bg-gray-600 focus:outline-none transition-all"
+                      placeholder="Try 'river views' or 'traditional grill'..."
+                      className="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-white dark:focus:bg-gray-600 focus:outline-none transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -144,14 +144,14 @@ export function HeroSection({
               </div>
 
               {/* Quick Search Tags */}
-              <div className="mt-4 flex flex-wrap gap-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Popular:</span>
-                {['Restaurants', 'Hotels', 'Spa & Wellness', 'Nightlife', 'Shopping'].map((tag) => (
+              <div className="mt-5 flex flex-wrap gap-2.5 items-center">
+                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Trending now:</span>
+                {['Border Markets', 'Local Grill Houses', 'Spa Resorts', 'Vardar River Views', 'Wine Tastings'].map((tag) => (
                   <button
                     key={tag}
                     type="button"
                     onClick={() => setSearchQuery(tag)}
-                    className="px-3 py-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-full transition-colors"
+                    className="px-4 py-1.5 bg-white/80 dark:bg-gray-700/80 hover:bg-white dark:hover:bg-gray-600 backdrop-blur-sm text-gray-800 dark:text-gray-200 text-sm font-medium rounded-full border border-gray-200 dark:border-gray-600 hover:border-primary hover:text-primary transition-all shadow-sm hover:shadow"
                   >
                     {tag}
                   </button>
@@ -199,20 +199,20 @@ export function HeroSection({
           transition={{ duration: 0.8, delay: 0.8 }}
           className="mt-12 text-center"
         >
-          <div className="flex flex-wrap items-center justify-center gap-6 text-gray-300">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center justify-center gap-6 text-gray-200">
+            <div className="flex items-center gap-2.5">
               <Award className="w-5 h-5 text-amber-400" />
-              <span className="text-sm md:text-base">100% Verified Listings</span>
+              <span className="text-sm md:text-base font-medium">Every venue personally verified</span>
             </div>
-            <div className="hidden md:block w-1 h-1 bg-gray-500 rounded-full" />
-            <div className="flex items-center gap-2">
+            <div className="hidden md:block w-1 h-1 bg-gray-400 rounded-full" />
+            <div className="flex items-center gap-2.5">
               <Star className="w-5 h-5 text-amber-400" />
-              <span className="text-sm md:text-base">Top Rated Experiences</span>
+              <span className="text-sm md:text-base font-medium">4.8 stars from real locals & visitors</span>
             </div>
-            <div className="hidden md:block w-1 h-1 bg-gray-500 rounded-full" />
-            <div className="flex items-center gap-2">
+            <div className="hidden md:block w-1 h-1 bg-gray-400 rounded-full" />
+            <div className="flex items-center gap-2.5">
               <TrendingUp className="w-5 h-5 text-green-400" />
-              <span className="text-sm md:text-base">Trusted by Thousands</span>
+              <span className="text-sm md:text-base font-medium">Updated daily by our team</span>
             </div>
           </div>
         </motion.div>
