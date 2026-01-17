@@ -33,7 +33,7 @@ export function TrustBadges() {
     {
       icon: Award,
       title: 'Updated Daily, Not Monthly',
-      description: 'When a place closes or a new spot opens, you'll know the same week',
+      description: 'When a place closes or a new spot opens, you\'ll know the same week',
       color: 'from-green-500 to-emerald-500',
     },
   ];
