@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
-
+//aaa
 interface FadeInProps {
   children: ReactNode;
   delay?: number;
